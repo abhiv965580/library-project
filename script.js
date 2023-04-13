@@ -1,50 +1,72 @@
 let myLibrary = [];
-let table = document.querySelector('table');
-let tableRow;
-let rowData;
-const btn = document.querySelector('button');
+let table = document.querySelector("table");
+const newBtn = document.querySelector("#new-btn");
+const form = document.querySelector("form");
 
-function Book(title, author,pages) {
+function Book(title, author, pages, readStatus) {
     this.title = title,
     this.author = author,
-    this.pages = pages
+    this.pages = pages,
+    this.readStatus = readStatus;
 }
 
-const theHobbits = new Book("The Hobbits","J.R.R. Tolkiens",295);
-const harryPotter = new Book("Harry Potter and The Cursed Child","J.K. Rowling", 345);
-myLibrary.push(theHobbits,harryPotter);
+const theHobbits = new Book(
+    "The Hobbits",
+    "J.R.R. Tolkiens",
+    295, 
+    "Read"
+);
 
-Book.prototype.info = function () {
-    return(`${this.title} by ${this.author}, ${this.pages} pages, not read yet`);
-}
+const harryPotter = new Book(
+  "Harry Potter and The Cursed Child",
+  "J.K. Rowling",
+  345,
+  "Unread"
+);
+myLibrary.push(theHobbits, harryPotter);
 
 function addBookToLibrary() {
-    let bookName = prompt("Enter the book to add to your library:");
-    let bookAuthor = prompt("Enter the author name:");
-    let bookPages = prompt("Enter the number of pages:");
-    let newBook = new Book(bookName, bookAuthor, bookPages);
-    myLibrary.push(newBook);
-}
-
-function writeColumn(data) {
-    console.log(data);
-    let column = document.createElement("td");
-    column.textContent = data;
-    rowData.appendChild(column);
+  let title = document.querySelector("#book-name").value;
+  let author = document.querySelector("#author-name").value;
+  let pages = document.querySelector("#pages").value;
+  let readStatus = document.querySelector(
+    'input[name="read_status"]:checked'
+  ).value;
+  let newBook = new Book(title, author, pages, readStatus);
+  myLibrary.push(newBook);
+  displayBooks();
+  form.style.display = "none";
 }
 
 function displayBooks() {
-    for(var i = 0; i < myLibrary.length; i++) {
-        tableRow = document.createElement("tr");
-        tableRow.className = `book${i}`;
-        table.appendChild(tableRow);
-        rowData = document.querySelector(`.book${i}`);
-        writeColumn(myLibrary[i].title);
-        writeColumn(myLibrary[i].author);
-        writeColumn(myLibrary[i].pages);
-    }
+  table.innerHTML = `<tr class='table-heading'>
+    <th>Book Name</th><th>Author Name</th><th>Pages</th>
+    <th>Read Status</th></tr>`;
+  for (var i = 0; i < myLibrary.length; i++) {
+    rowEl = document.createElement("tr");
+    rowEl.innerHTML =`
+    <td>${myLibrary[i].title}</td>
+    <td>${myLibrary[i].author}</td>
+    <td>${myLibrary[i].pages}</td>
+    <td>${myLibrary[i].readStatus}</td>
+    <button class="rem-btn" onclick="removeBook(${i})">Remove</button>
+    `;
+    table.appendChild(rowEl);
+  }
 }
 
-btn.addEventListener("click", addBookToLibrary);
+newBtn.addEventListener("click", () => {
+  form.style.display = "block";
+});
+
+form.addEventListener("submit", function (event) {
+  event.preventDefault();
+  addBookToLibrary();
+});
+
+function removeBook(index) {
+    myLibrary.splice(index, 1);
+    displayBooks();
+}
 
 displayBooks();
