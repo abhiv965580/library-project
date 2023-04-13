@@ -10,6 +10,15 @@ function Book(title, author, pages, readStatus) {
     this.readStatus = readStatus;
 }
 
+Book.prototype.changeReadStatus = function() {
+    if (this.readStatus === "Read") {
+        this.readStatus = "Unread";
+    }
+    else{
+        this.readStatus = "Read";
+    }
+}
+
 const theHobbits = new Book(
     "The Hobbits",
     "J.R.R. Tolkiens",
@@ -50,6 +59,7 @@ function displayBooks() {
     <td>${myLibrary[i].pages}</td>
     <td>${myLibrary[i].readStatus}</td>
     <button class="rem-btn" onclick="removeBook(${i})">Remove</button>
+    <button class="read-status-btn" onclick="changeReadStatus(${i})">Change Read Status</button>
     `;
     table.appendChild(rowEl);
   }
@@ -66,6 +76,11 @@ form.addEventListener("submit", function (event) {
 
 function removeBook(index) {
     myLibrary.splice(index, 1);
+    displayBooks();
+}
+
+function changeReadStatus(index) {
+    myLibrary[index].changeReadStatus();
     displayBooks();
 }
 
