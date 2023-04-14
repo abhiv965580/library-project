@@ -32,9 +32,10 @@ const harryPotter = new Book(
   345,
   "Unread"
 );
+
 myLibrary.push(theHobbits, harryPotter);
 
-function addBookToLibrary() {
+const addBookToLibrary = () => {
   let title = document.querySelector("#book-name").value;
   let author = document.querySelector("#author-name").value;
   let pages = document.querySelector("#pages").value;
@@ -47,21 +48,36 @@ function addBookToLibrary() {
   form.style.display = "none";
 }
 
-function displayBooks() {
-  table.innerHTML = `<tr class='table-heading'>
-    <th>Book Name</th><th>Author Name</th><th>Pages</th>
-    <th>Read Status</th></tr>`;
-  for (var i = 0; i < myLibrary.length; i++) {
-    rowEl = document.createElement("tr");
-    rowEl.innerHTML =`
-    <td>${myLibrary[i].title}</td>
-    <td>${myLibrary[i].author}</td>
-    <td>${myLibrary[i].pages}</td>
-    <td>${myLibrary[i].readStatus}</td>
-    <button class="rem-btn" onclick="removeBook(${i})">Remove</button>
-    <button class="read-status-btn" onclick="changeReadStatus(${i})">Change Read Status</button>
-    `;
-    table.appendChild(rowEl);
+const displayBooks = () => {
+  if (myLibrary.length > 0) {
+      table.innerHTML = `
+      <tr class='table-heading'>
+      <th>Book Name</th>
+      <th>Author Name</th>
+      <th>Pages</th>
+      <th>Read Status</th>
+      <th>Actions</th>
+      </tr>
+      `;
+    for (var i = 0; i < myLibrary.length; i++) {
+      rowEl = document.createElement("tr");
+      rowEl.innerHTML =`
+      <td>${myLibrary[i].title}</td>
+      <td><i>${myLibrary[i].author}</i></td>
+      <td>${myLibrary[i].pages}</td>
+      <td class="${myLibrary[i].readStatus}">${myLibrary[i].readStatus}</td>
+      <td>
+      <div class="btns">
+      <button class="rem-btn" onclick="removeBook(${i})"><img src="./icon/delete.svg" alt="Delete Icon"></button>
+      <button class="read-status-btn" onclick="changeReadStatus(${i})">Read/Unread</button>
+      </div>
+      </td>
+      `;
+      table.appendChild(rowEl);
+    }
+  }
+  else{
+    table.innerHTML = "";
   }
 }
 
@@ -74,12 +90,12 @@ form.addEventListener("submit", function (event) {
   addBookToLibrary();
 });
 
-function removeBook(index) {
+const removeBook = (index) => {
     myLibrary.splice(index, 1);
     displayBooks();
 }
 
-function changeReadStatus(index) {
+const changeReadStatus = (index) => {
     myLibrary[index].changeReadStatus();
     displayBooks();
 }
