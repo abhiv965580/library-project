@@ -3,7 +3,7 @@ let table = document.querySelector("table");
 const newBtn = document.querySelector("#new-btn");
 const form = document.querySelector("form");
 
-function Book(title, author, pages, readStatus) {
+function Book({title, author, pages, readStatus} = {}) {
     this.title = title,
     this.author = author,
     this.pages = pages,
@@ -20,17 +20,20 @@ Book.prototype.changeReadStatus = function() {
 }
 
 const theHobbits = new Book(
-    "The Hobbits",
-    "J.R.R. Tolkiens",
-    295, 
-    "Read"
+  {
+    title: "The Hobbits",
+    author: "J.R.R. Tolkiens",
+    pages: 295, 
+    readStatus: "Read"
+  }
 );
 
-const harryPotter = new Book(
-  "Harry Potter and The Cursed Child",
-  "J.K. Rowling",
-  345,
-  "Unread"
+const harryPotter = new Book({
+  title: "Harry Potter and The Cursed Child",
+  author: "J.K. Rowling",
+  pages: 345,
+  readStatus: "Unread"
+}
 );
 
 myLibrary.push(theHobbits, harryPotter);
@@ -42,7 +45,12 @@ const addBookToLibrary = () => {
   let readStatus = document.querySelector(
     'input[name="read_status"]:checked'
   ).value;
-  let newBook = new Book(title, author, pages, readStatus);
+  let newBook = new Book({
+    title, 
+    author, 
+    pages, 
+    readStatus
+  });
   myLibrary.push(newBook);
   displayBooks();
   form.style.display = "none";
@@ -52,11 +60,11 @@ const displayBooks = () => {
   if (myLibrary.length > 0) {
       table.innerHTML = `
       <tr class='table-heading'>
-      <th>Book Name</th>
-      <th>Author Name</th>
-      <th>Pages</th>
-      <th>Read Status</th>
-      <th>Actions</th>
+        <th>Book Name</th>
+        <th>Author Name</th>
+        <th>Pages</th>
+        <th>Read Status</th>
+        <th>Actions</th>
       </tr>
       `;
     for (var i = 0; i < myLibrary.length; i++) {
@@ -67,10 +75,10 @@ const displayBooks = () => {
       <td>${myLibrary[i].pages}</td>
       <td class="${myLibrary[i].readStatus}">${myLibrary[i].readStatus}</td>
       <td>
-      <div class="btns">
-      <button class="rem-btn" onclick="removeBook(${i})"><img src="./icon/delete.svg" alt="Delete Icon"></button>
-      <button class="read-status-btn" onclick="changeReadStatus(${i})">Read/Unread</button>
-      </div>
+        <div class="btns">
+          <button class="rem-btn" onclick="removeBook(${i})"><img src="./icon/delete.svg" alt="Delete Icon"></button>
+          <button class="read-status-btn" onclick="changeReadStatus(${i})">Read/Unread</button>
+        </div>
       </td>
       `;
       table.appendChild(rowEl);
@@ -88,6 +96,7 @@ newBtn.addEventListener("click", () => {
 form.addEventListener("submit", function (event) {
   event.preventDefault();
   addBookToLibrary();
+  form.reset();
 });
 
 const removeBook = (index) => {
