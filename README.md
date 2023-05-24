@@ -2,7 +2,7 @@
 
 In this Repo I made use of Objects and its Constructor to that will make objects of book and stores it in an array. Initially it will contain 2 pre stored Books including their author pages and read status.
 
-The screenshot of UI is attached in this PR for reference
+The screenshot of UI is attached in this Repo for reference
 
 ## Feature:
 
